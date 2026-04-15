@@ -12,6 +12,7 @@
     .ui-layer p { font-size: 1.5vw; }
     button { margin-top: 20px; padding: 1vw 3vw; font-size: 1.5vw; cursor: pointer; background-color: #4CAF50; color: white; border: none; border-radius: 10px; z-index: 10; }
     button:hover { background-color: #45a049; }
+    #start-screen { display: none; gap: 8px; }
     #hud { position: absolute; top: 50px; left: 60px; width: 100%; color: white; font-size: 2vw; font-weight: bold; text-shadow: 2px 2px 4px #000; pointer-events: none; z-index: 10; text-align: left; }
     #loading-screen { display: flex; background: #1a252c; z-index: 20; }
     canvas {
@@ -31,6 +32,11 @@
         <p>Vite 实验栈加载中，首次访问会建立浏览器缓存</p>
     </div>
 
+    <div id="start-screen" class="ui-layer">
+        <button id="play-now-button">Play Now</button>
+        <p>P</p>
+    </div>
+
     <div id="hud">
         剩余时间 Time left: <span id="time-display">60</span>s
     </div>
@@ -42,7 +48,7 @@
             <h3>排行榜 (Top 5)</h3>
             <ol id="leaderboard-list" style="text-align: left; font-size: 1.2vw;"></ol>
         </div>
-        <button id="restart-button">重新开始 (按空格键)</button>
+        <button id="restart-button">Play Now</button>
     </div>
 </div>
 

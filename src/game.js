@@ -32,6 +32,8 @@ import {
 const gameWrapper = document.getElementById("game-wrapper");
 const timeDisplay = document.getElementById("time-display");
 const gameOverScreen = document.getElementById("game-over-screen");
+const startScreen = document.getElementById("start-screen");
+const playNowButton = document.getElementById("play-now-button");
 const finalScoreDisplay = document.getElementById("final-score");
 const leaderboardList = document.getElementById("leaderboard-list");
 const restartButton = document.getElementById("restart-button");
@@ -58,13 +60,17 @@ const state = {
 };
 
 window.addEventListener("keydown", (event) => {
+  const loweredKey = event.key.toLowerCase();
+  const shouldStartGame =
+    loweredKey === "p" || event.code === "Space";
+
   keys[event.key.toLowerCase()] = true;
 
-  if (
-    event.code === "Space" &&
-    state.isGameOver &&
-    Object.keys(loadedResources).length > 0
-  ) {
+  if (shouldStartGame) {
+    event.preventDefault();
+  }
+
+  if (shouldStartGame && state.isGameOver && Object.keys(loadedResources).length > 0) {
     startGame();
   }
 });
@@ -74,6 +80,7 @@ window.addEventListener("keyup", (event) => {
 });
 
 restartButton.addEventListener("click", startGame);
+playNowButton.addEventListener("click", startGame);
 
 function renderLeaderboard(scores) {
   leaderboardList.innerHTML = "";
@@ -108,6 +115,7 @@ function createPlayer() {
 }
 
 function startGame() {
+  startScreen.style.display = "none";
   gameOverScreen.style.display = "none";
 
   if (player) {
@@ -267,7 +275,7 @@ function loadGame() {
       createVisualObject = createVisualObjectFactory(app, resources);
 
       app.ticker.add(gameLoop);
-      startGame();
+      startScreen.style.display = "flex";
     })
     .catch((error) => {
       console.error("加载资源出错, 请检查路径:", error);
