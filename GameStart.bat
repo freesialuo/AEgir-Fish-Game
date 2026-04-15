@@ -1,4 +1,4 @@
 @echo off
-echo 正在启动服务器...
-start http://localhost:8000/index.html
-python -m http.server 8000
+cd /d "%~dp0"
+echo 正在构建并启动游戏...
+npm run play

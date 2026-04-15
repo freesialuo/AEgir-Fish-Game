@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "play": "python3 -m http.server 8000",
+    "play": "node scripts/play.mjs",
     "preview": "vite preview",
     "test": "node --test",
     "validate": "node scripts/validate-project.mjs",
