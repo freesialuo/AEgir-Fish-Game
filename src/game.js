@@ -30,6 +30,7 @@ import {
 } from "./systems/view.js";
 
 const gameWrapper = document.getElementById("game-wrapper");
+const hud = document.getElementById("hud");
 const timeDisplay = document.getElementById("time-display");
 const gameOverScreen = document.getElementById("game-over-screen");
 const finalScoreDisplay = document.getElementById("final-score");
@@ -75,11 +76,17 @@ const state = {
 window.addEventListener("keydown", (event) => {
   const loweredKey = event.key.toLowerCase();
   const shouldStartGame = loweredKey === "p";
+  const shouldReturnToDemo = event.code === "Escape";
 
   keys[loweredKey] = true;
 
-  if (shouldStartGame) {
+  if (shouldStartGame || shouldReturnToDemo) {
     event.preventDefault();
+  }
+
+  if (shouldReturnToDemo && state.mode === "play") {
+    startGame("demo");
+    return;
   }
 
   if (
@@ -112,6 +119,12 @@ function resetState() {
   state.isGameOver = false;
   accumulatedTimeMs = 0;
   timeDisplay.innerText = String(INITIAL_TIME_LEFT);
+}
+
+function clearPlayerInput() {
+  Object.keys(keys).forEach((key) => {
+    keys[key] = false;
+  });
 }
 
 function clearDemoInput() {
@@ -154,6 +167,11 @@ function startGame(mode = "play") {
 
   state.mode = mode;
   gameOverScreen.style.display = "none";
+  hud.style.display = mode === "demo" ? "none" : "block";
+
+  if (scoreDisplay?.parent) {
+    scoreDisplay.parent.visible = mode !== "demo";
+  }
 
   if (player) {
     player.destroy(removeView, app);
@@ -162,6 +180,7 @@ function startGame(mode = "play") {
   destroyEntities();
   createPlayer();
   resetState();
+  clearPlayerInput();
   clearDemoInput();
   state.demoDecisionTimer = 0;
   state.demoTargetX = GAME_WIDTH / 2;
@@ -183,6 +202,10 @@ function endGame() {
 }
 
 function updateTime(delta) {
+  if (state.mode === "demo") {
+    return true;
+  }
+
   const deltaSeconds = delta / 60;
   state.timeLeft -= deltaSeconds;
 
